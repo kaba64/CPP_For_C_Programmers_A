@@ -186,6 +186,7 @@ public:
   }
   // get the minimum distance in each search
   double getMinDistValue()const{return distMin;}
+
   //visulize the adjacency matrix
   void VisualizeGraph(const char name)const{
     std::cout<<"\t";
@@ -203,6 +204,7 @@ public:
       std::cout<<"\n";
     }
   }
+  
   // plot the SPT in each search with the corresponding distance
   void plotShort()const{
     // we stored nodes in the SPT and distances in two vectors
@@ -241,6 +243,7 @@ public:
       else
     	std::cout<<path[i]<<" --- (cost="<<PathDist[i-1]<<") ---> "<<path[i-1]<<"\n";
   }
+  
   ~Graph(){
     //std::cout<<"Destructor\n";
     for(unsigned long int i=0;i<size;++i)
