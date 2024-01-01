@@ -271,10 +271,11 @@ public:
     std::vector<VC> vorticesWeight;
     VC eachIteration;
     std::vector<std::pair<bool,double>> MSTsetKey; // pair : (MSTset,Key)
+
     for (unsigned long int i = 0; i < size; ++i){
       MSTsetKey.push_back(std::make_pair(false,inf));
     }
-
+    
     //1st vertex in MST by assigning 0 to its key
     MSTsetKey[0].second = 0.0;
     
@@ -298,7 +299,7 @@ public:
       // Add the picked vortex and its
       //sorce vortex and cost to a vector for visualization 
       for(unsigned long int j=0;j< size; ++j){
-	if(graphRandom[MSTIndex][j].cost==minimum){
+	if(graphRandom[MSTIndex][j].cost==minimum && MSTsetKey[j].first==true){
 	  if(MSTIndex==0)
 	    break;
 	  else{
