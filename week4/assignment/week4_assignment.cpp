@@ -13,6 +13,8 @@
 #include <vector>
 #include <random>
 #include <climits>
+#include <cstdlib>
+#include <ctime>
 #include <algorithm>
 #include <string>
 #include <fstream>
@@ -25,12 +27,12 @@ private:
 public:
   Random(const int aIn=0,const int bIn=1)
     :a(aIn),b(bIn){
-    srand(time(0));
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
   }
   // compute a double random number
-  double randomDoub(){return static_cast<double>(rand()) / static_cast<double>(RAND_MAX);}
+  double randomDoub(){return static_cast<double>(std::rand()) / static_cast<double>(RAND_MAX);}
   // Compute a integer randon number in [a,b] where b>a
-  int randomInt(){return a + (rand() % (b - a));}
+  int randomInt(){return a + (std::rand() % (b - a));}
   // Compute a double randon number in [a,b] where b>a
   double randomDouble(){return static_cast<double>(randomInt()) + randomDoub();}
 };
