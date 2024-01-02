@@ -14,6 +14,7 @@
 #include <random>
 #include <climits>
 #include <cstdlib>
+#include <filesystem>
 #include <ctime>
 #include <algorithm>
 #include <string>
@@ -119,55 +120,66 @@ public:
     ,nameFile(nameIn){
     
     // Creation of ifstream class object to read the file
-    std::ifstream fin;
-    fin.open(nameFile);
-    std::string dataInFile;
-    getline(fin,dataInFile);
-    size = stoi(dataInFile);
-    /*allocate memory for the graph
-     VE is a struct with two elements*/
-    graphRandom = new VE*[size];
-    for(unsigned long int i=0;i<size;++i)
-      graphRandom[i] = new VE[size];
-    // allocate memory for set
-    DijkstraAlg = new set[size];
-    // first initialize the graph to zero
-    for(unsigned long int i=0;i<size;++i){
-      for(unsigned long int j=0;j<size;++j){
-        graphRandom[i][j].edge = false;
-        graphRandom[i][j].cost = 0.0;
-     }
-    }
-    // Read the data from the file into the (i,j)
-    std::string s1;
-    int i,j;
-    double costij;
-    int spaceFirst, spaceSecond;
-    while(getline(fin,dataInFile)){
-      
-      spaceFirst = dataInFile.find(" ",0);
-      spaceSecond = dataInFile.find(" ",spaceFirst+1);
+    if (std::filesystem::exists(nameFile)){
 
-      for(int i=0;i<spaceFirst;++i)
-	s1+=dataInFile[i];
-      i = stoi(s1);
-      s1.clear();
-      
-      for(int i=spaceFirst+1;i<spaceSecond;++i)
-	s1+=dataInFile[i];
-      j = stoi(s1);
-      s1.clear();
-      
-      spaceSecond = static_cast<unsigned long int>(spaceSecond);
-      for(unsigned long int i=spaceSecond+1;i<dataInFile.size();++i)
-	s1+=dataInFile[i];
-      costij = stod(s1);
-      s1.clear();
-      
-      graphRandom[i][j].cost = costij;
-      graphRandom[i][j].edge = static_cast<bool>(costij);
+      std::ifstream fin(nameFile);
+
+      if (fin.is_open()) {
+	std::string dataInFile;
+	getline(fin,dataInFile);
+	size = stoi(dataInFile);
+	/*allocate memory for the graph
+	  VE is a struct with two elements*/
+	graphRandom = new VE*[size];
+	for(unsigned long int i=0;i<size;++i)
+	  graphRandom[i] = new VE[size];
+	// allocate memory for set
+	DijkstraAlg = new set[size];
+	// first initialize the graph to zero
+	for(unsigned long int i=0;i<size;++i){
+	  for(unsigned long int j=0;j<size;++j){
+	    graphRandom[i][j].edge = false;
+	    graphRandom[i][j].cost = 0.0;
+	  }
+	}
+	// Read the data from the file into the (i,j)
+	std::string s1;
+	int i,j;
+	double costij;
+	int spaceFirst, spaceSecond;
+	while(getline(fin,dataInFile)){
+	  
+	  spaceFirst = dataInFile.find(" ",0);
+	  spaceSecond = dataInFile.find(" ",spaceFirst+1);
+	  
+	  for(int i=0;i<spaceFirst;++i)
+	    s1+=dataInFile[i];
+	  i = stoi(s1);
+	  s1.clear();
+	  
+	  for(int i=spaceFirst+1;i<spaceSecond;++i)
+	    s1+=dataInFile[i];
+	  j = stoi(s1);
+	  s1.clear();
+	  
+	  spaceSecond = static_cast<unsigned long int>(spaceSecond);
+	  for(unsigned long int i=spaceSecond+1;i<dataInFile.size();++i)
+	    s1+=dataInFile[i];
+	  costij = stod(s1);
+	  s1.clear();
+	  
+	  graphRandom[i][j].cost = costij;
+	  graphRandom[i][j].edge = static_cast<bool>(costij);
+	}
+      }else {
+	std::cerr << "Error: Could not open the file." << std::endl;
+	exit(1);
+      }
+      fin.close();
+    }else {
+      std::cerr << "Error: The file does not exist." << std::endl;
+      exit(1);
     }
-    fin.close();
   }
   bool isConnected(const int searchNod)const{
     
